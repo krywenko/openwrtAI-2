@@ -1,6 +1,6 @@
 #!/bin/bash
 
-   NUM=$(cat ebook/emma |  sed -n '/^######CHAPTERS######/,/^######END######/p;/^######END######/q' | sed  '1d;$d' | cut -d',' -f $1)  ## gets chappter info at bottom of the book
+   NUM=$(cat booktitle.tmp |  sed -n '/^######CHAPTERS######/,/^######END######/p;/^######END######/q' | sed  '1d;$d' | cut -d',' -f $1)  ## gets chappter info at bottom of the book
    
    #echo $NUM
    cnt=$NUM
