@@ -1,0 +1,38 @@
+chroot
+mplayer
+vlc
+flite
+ffmpeg
+pip
+for offine stt whisper is the best though a little big but very acurate and fast
+
+https://github.com/openai/whisper
+pip install setuptools
+pip install -U openai-whisper
+it install to /usr/local/bin
+add it to path 
+export PATH=/usr/local/bin:$PATH
+whisper /recording path  --model tiny --language English  --fp16 False   -o /tmp -f txt
+
+sudo gpasswd -a nobody audio
+sudo -H -u nobody
+mount -o bind /dev /chroot_mnt_point/dev  # for audio device sharing 
+
+
+host
+chroot  if you want to use  localize speech text engines and access to more streaming radio stations 
+otherwise gtts and speechreconizer wiwill suffice 
+on host for fuzzy logic 
+git clone https://github.com/rbm78bln/levenshtein.git
+make 
+and cp levenshtein /bin
+mpg123
+bash
+coreutilities *.*
+grep
+make gcc
+git
+curl
+
+mount -o bind /dev /root/VLC_JULIUS/dev
+mount -o bind /tmp /root/VLC_JULIUS/tmp
