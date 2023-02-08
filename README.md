@@ -6,11 +6,11 @@ openwrt Basic AI software V2 . has built in levenshtein  for fuzzy logic control
  
  it can be uses  on systems  that do not require chroot or within chroot  you just need to adjust chroot sections to  localize copies . so instead of coping  the bash files from chroot directory  to your chroot /bin folder you would jus copy it to your localized /bin folder  and install all programs locally , vlc, mplayer and flite. 
  included is the bash script to build the chroot folder for you, with all the required sofware installed, if you want the higher functions of multichannel manipulation ( 4.0, 5.1 and 7.1 sound systems)  and better webradio playback support. otherwise it not required for a very small foot print install.. such as speech.recognition, gtts  and mpg123
- domoticz folder contains the basic on of switch for openwrtAI- since domotizc  runs as nobody.  you have to pass your password to it  
+ domoticz folder contains the basic on/off switch for openwrtAI- since domotizc  runs as nobody.  you have to pass your password to it  
  ```
- ie: AI_ON.sh "password"    to raise  it level
+ AI_ON.sh "password"   # to raise  it level
  ```
- what required for a basic install
+ what required for a basic install 
 ```
 pip install SpeechRecognition
 ```
