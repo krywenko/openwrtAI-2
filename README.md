@@ -61,3 +61,5 @@ cp levenshtein exec to /bin
 and you are off and running
 
 openwrtAI is the main executable
+
+if you want speech across all speaker ports  based on whereplayback is  or fixed acroos all  just run MPLAYER instead of mpg123. it only currenly works with using online speach translation as i have not figured out how  force flite to  to do it directly - but can be dom if you tell flite to record TTS and then play it with MPLAYER--  
