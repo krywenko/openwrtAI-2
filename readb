@@ -1,0 +1,16 @@
+#!/bin/bash
+cnt=0          
+while read -r line;do           
+((cnt++))
+echo $cnt > bookline.tmp
+    echo -e "$line" 
+    if [ "$2" == '1' ] ;then 
+#    echo $line | flite --setf duration_stretch=1.15 -voice $3
+
+      echo $line > /root/OpenWrtAI/tmp/book.tmp
+     chroot /root/OpenWrtAI /bin/bash FLITER.sh  $3
+
+    else
+    ./google $line  > /dev/null 2>&1
+    fi 
+done <$1 

@@ -1,0 +1,23 @@
+#!/bin/bash
+   NUM=$(cat bookline.tmp)
+   echo $NUM
+   ((NUM--))
+   ((NUM--))
+   cnt=$NUM
+   echo $cnt
+   BOOK=$(cat booktitle.tmp)
+   BOOK="ebook/"$BOOK
+   echo $BOOK
+while IFS= read -r line;do           
+ ((cnt++))
+ echo $cnt > bookline.tmp
+    echo -e "$line" 
+    if [ "$1" == '1' ] ;then 
+   # echo $line | flite --setf duration_stretch=1.15 -voice $2   # localized flite
+
+    echo $line > /root/OpenWrtAI/tmp/book.tmp
+   chroot /root/OpenWrtAI /bin/bash FLITER.sh  $2 
+    else
+    ./google $line  > /dev/null 2>&1
+    fi 
+done < <(tail -n "+$NUM" $BOOK)

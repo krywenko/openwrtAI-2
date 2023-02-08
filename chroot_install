@@ -1,0 +1,16 @@
+ #!/bin/sh
+
+THIS_CHROOT="/root/OpenWrtAI"
+
+#chroot is not there, build it
+if [ ! -d "$THIS_CHROOT" ]; then
+  debootstrap --arch amd64 bullseye "$THIS_CHROOT"
+
+  chroot "$THIS_CHROOT" /bin/bash -c "apt install -y curl  git vim nano wget tar unzip vlc sudo"
+fi
+
+
+chroot "$THIS_CHROOT" /bin/bash -c "mount -t proc proc /proc && \
+mount -t sysfs sys /sys && \
+apt-get install -y vlc mplayer flite mpg123 ffmpeg && \
+gpasswd -a nobody audio"

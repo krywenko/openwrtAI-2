@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+import wolframalpha
+import sys  
+# Taking input from user
+question = sys.argv[1]
+  
+# App id obtained by the above steps
+app_id = 'XXXXXXXXXXXXXXXXXXX'
+  
+# Instance of wolf ram alpha 
+# client class
+client = wolframalpha.Client(app_id)
+  
+# Stores the response from 
+# wolf ram alpha
+res = client.query(question)
+  
+# Includes only text from the response
+answer = next(res.results).text
+  
+print(answer)

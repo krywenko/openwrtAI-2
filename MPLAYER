@@ -1,0 +1,13 @@
+#!/bin/bash
+pkill mplayer
+pkill MPLAYER.sh
+ playback=$(cat playback.tmp)
+
+ if [ $playback == 'house' ] ; then
+         chroot /root/OpenWrtAI /bin/bash MPLAYER.sh "$*"  '-af channels=4:4:0:2:0:0:1:3:1:1' #channel mapping audio on 5.1 device  front  and rear playing
+  elif [ $playback == 'livingroom' ] ; then
+         chroot /root/OpenWrtAI /bin/bash MPLAYER.sh "$*" '-af channels=4:2:0:2:1:3'  ##channel mapping audio on 5.1 device  only rear playing
+  else
+         chroot /root/OpenWrtAI /bin/bash MPLAYER.sh "$*"  # front only plays 
+  fi
+

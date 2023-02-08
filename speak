@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+# need gTTS and mpg123
+# pip install gTTS
+# apt install mpg123
+
+from gtts import gTTS
+import os
+import sys
+VOICE="kal" # the default voice of flite 
+# define variables
+file = "/tmp/audio.mp3"
+s = sys.argv[1]
+if len(sys.argv) == 4 or len(sys.argv) == 3:
+ 
+  
+   ONLINE = int(sys.argv[2])
+   if len(sys.argv) == 4:
+      VOICE = sys.argv[3]
+
+   if ONLINE == 1:
+    #  os.system("echo "+ s +" |flite --setf duration_stretch=1.15 -voice " + VOICE)
+      os.system( 'chroot /root/VLC_JULIUS /bin/bash FLITE.sh "' + s + '" ' +  VOICE)
+   else:
+      tts = gTTS(s, 'com')
+      tts.save(file)
+      os.system("mpg123 " + file)
+else:
+      tts = gTTS(s, 'com')
+      tts.save(file)
+      os.system("mpg123 " + file)

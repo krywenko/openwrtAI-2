@@ -1,0 +1,32 @@
+#!/bin/bash
+
+lynx -dump 'https://weather.gc.ca/city/pages/mb-24_metric_e.html'   | 
+sed -n '/^Detailed ForecastForecast issued/,/^Detailed ForecastForecast issued/p' | 
+#sed '/\[/,/\]/{//!d;};' | 
+sed '/^ForecastForecast issued/,/^Detailed ForecastForecast issued/{//!d;};' |
+sed  -e  '/Detailed ForecastForecast issued/d' |
+sed  -e '/ForecastForecast issued/d' |
+sed  -e 's/date Detailed Forecast//g'  |
+sed  's/\C\>/Celsius /g' | 
+sed  's/\F\>/Fahrenheit /g' | 
+sed  's/CST//g' |  
+#sed  's/\]//g' |  
+sed -r '/^\s*$/d' |sed 's/^[[:space:]]*//'|
+sed 's/\[.*\]//' | 
+sed 's/^/ /' | 
+tr -d '\r\n' | 
+sed 's/\. /\n/g' | 
+sed 's/\*\*\* /\n/g' | 
+sed  's/\*//g' | 
+sed  's/\Mon\>/Monday /g' |
+sed  's/\Tue\>/Tuesday /g' |
+sed  's/Wed/Wedensday /g' |
+tr    'Wed' 'Wedensday,'  |
+sed  's/\Thu\>/Thursday /g' |
+sed  's/\Fri\>/Friday /g' |
+sed  's/\Sat\>/Saturday /g' |
+sed -e 's/[S]un\>/Sunday /g' |
+#tr    'Sun' 'Sunday' |
+sed  's/\km\/h\>/kilometers-per-hour /g' |
+sed 's/$/\./' |sed 's/Today/\n&/g' |sed 's/Tonight/\n&/g' > /tmp/forecast.tmp  
+#sed $'/Today/\\\n/g'

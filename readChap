@@ -1,0 +1,23 @@
+#!/bin/bash
+
+   NUM=$(cat ebook/emma |  sed -n '/^######CHAPTERS######/,/^######END######/p;/^######END######/q' | sed  '1d;$d' | cut -d',' -f $1)  ## gets chappter info at bottom of the book
+   
+   #echo $NUM
+   cnt=$NUM
+  # echo $cnt
+   BOOK=$(cat booktitle.tmp)
+   BOOK="ebook/"$BOOK
+   #echo $BOOK
+while IFS= read -r line;do           
+ ((cnt++))
+ echo $cnt > bookline.tmp
+    echo -e "$line" 
+    if [ "$2" == '1' ] ;then 
+   # echo $line | flite --setf duration_stretch=1.15 -voice $3   # if you have local running flite 
+    
+    echo $line > /root/OpenWrtAI/tmp/book.tmp
+    chroot /root/OpenWrtAI /bin/bash FLITER.sh $3   
+    else
+    ./google $line  > /dev/null 2>&1
+    fi 
+done < <(tail -n "+$NUM" $BOOK)

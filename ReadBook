@@ -1,0 +1,61 @@
+ #!/bin/bash
+
+   ./speak " I have a selection of books that i can read.  do you want me to list them. or continue  reading  where we left off " $1 $2 > /dev/null 2>&1
+        arecord -f S16_LE -d 3 -r 8000  /tmp/mic.wav  > /dev/null 2>&1
+        ./speak "one moment" $1 $2 > /dev/null 2>&1
+         ./gtrans.py > /tmp/stt # > /dev/null 2>&1
+         Output=$(cat /tmp/stt | sed -s '1d' | grep transcript | head -n 1 | sed  "s/'transcript': //g" |sed  "s/},//g" |sed 's/^ *//' |sed 's/}],//' | sed 's/{.*, //' ) #
+         #echo $Output
+         
+  CHAP="$(echo -e "${Output}" | cut -f 1 -d " "| sed "s/'//g")"
+         
+         if [ "$CHAP"   == 'CHAPTER' ] || [ "$CHAP"   == 'Chapter' ] || [ "$CHAP"   == 'chapter' ]; then
+         
+         #echo $Output
+            BOOK="$(echo -e "${Output}" | sed "s/^'CHAPTER//"| sed "s/^'Chapter//"|  sed "s/^'chapter//"|sed "s/'//g"| tr -d ' ' )"
+            if [ "$BOOK"   == 'one' ] ; then 
+           # echo "####"
+            BOOK=1 
+            fi
+           # echo $BOOK
+         ./readChap $BOOK $1 $2
+         fi       
+         
+         
+         
+         
+         N_WHITESPACE="$(echo -e "${Output}" | sed 's/$/-1/' | tr -d ' ' | sed "s/'//g" )"
+   
+  echo $N_WHITESPACE
+ 
+  
+if [ "$N_WHITESPACE"   == 'listbooks-1' ] || [ "$N_WHITESPACE"   == 'list-1' ] || [ "$N_WHITESPACE"   == 'listthebooks-1' ]|| [ "$N_WHITESPACE"   == 'listbook-1' ]
+then
+         ./speak " okay,  the book list"  $1 $2   > /dev/null 2>&1
+          sleep 2
+           ./read ebook/title.list  $1 $2
+ 
+   
+   
+elif [ "$N_WHITESPACE"   == 'continue-1' ]
+then
+    ./readCon $1 $2
+else  
+
+READ="$(echo -e "${Output}" | cut -f 1 -d " "| sed "s/'//g")"
+         #echo $READ
+         if [ "$READ"   == 'read' ] || [ "$READ"   == 'Read' ]; then
+         #echo $Output
+            BOOK="$(echo -e "${Output}" | sed "s/^'read//"| sed "s/^'Read//"| sed "s/'//g" | tr " " "_")"
+            echo $BOOK
+            TMP="$(levenshtein -s d -H 1 -f ebook/book.list $BOOK )"   #### fuzzy logic using levenshtein method 
+            echo $TMP > booktitle.tmp
+           
+            ./speak "okay reading "  $1 $2 > /dev/null 2>&1
+            
+            ./readb ebook/$TMP  $1 $2        
+          
+         fi
+
+
+fi

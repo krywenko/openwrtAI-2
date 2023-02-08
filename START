@@ -1,0 +1,9 @@
+#!/bin/bash
+mount -o bind /dev /root/OpenWrtAI/dev
+mount -o bind /tmp /root/OpenWrtAI/tmp
+mount -o bind /MEDIA /root/OpenWrtAI/MEDIA
+
+
+
+chroot /root/OpenWrtAI /bin/bash START.sh
+exit 0

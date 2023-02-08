@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#cat 1111 |
+lynx -dump 'https://weather.gc.ca/city/pages/mb-24_metric_e.html'   | 
+sed -n '/Current Conditions/,/  More details/p' | 
+sed '/Observed/,/Current Conditions/{//!d;};' |sed '1d'|sed '$d'| sed '3d'| 
+sed  's/\C\>/Celsius /g' | 
+sed  's/\F\>/Fahrenheit /g' |   
+sed -r '/^\s*$/d' |sed 's/^[[:space:]]*//'|
+sed 's/\[.*\]//' |sed '1,2!d' > /tmp/current.tmp 
+
