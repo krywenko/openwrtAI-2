@@ -1,0 +1,4 @@
+#!/bin/bash
+sed -i '/######CHAPTERS######/,/######END######/d' $1
+grep -n CHAPTER $1 | cut -f1 -d: | awk -vORS=, '{ print $1 }' | sed 's/,$/\n/' | sed ' i ######CHAPTERS######'| sed '$ a  ######END######' >> $1
+
