@@ -40,7 +40,7 @@ compile flac
 ```
 opkg install gcc make 
 wget https://github.com/xiph/flac/releases/download/1.3.4/flac-1.3.4.tar.xz -O flac.tar.xz
-tar -xvf fac.tar.xzgit clone https://github.com/rbm78bln/levenshtein.git
+tar -xvf fac.tar.xz
 cd flac
 chmod +x configure
 ./configure
