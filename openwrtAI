@@ -1,8 +1,18 @@
 #!/bin/bash
 
-chroot /root/OpenWrtAI/ /bin/bash ./kill.sh
+PROG=$(pgrep openwrtAI |wc -l)
+echo $PROG
+if [ $PROG -gt '2' ] ; then
+echo "more then one copy running"
+chroot /root/VLC_JULIUS/ /bin/bash ./kill.sh
 pkill mpg123
 pkill read
+pkill speak
+pkill readCon
+pkill readChap
+pkill flite
+fi
+
 A=0
 B=0
 DOMOTICZ=http://192.168.168.150:8080
