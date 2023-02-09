@@ -97,7 +97,33 @@ if [ "$NO_WHITESPACE" == 'stop-1' ]
  elif  [ "$NO_WHITESPACE" == 'continue-1' ] 
      then
        ./readCon $O $V
+        A=3
+
+elif  [ "$NO_WHITESPACE" == 'information-1' ]
+       then
+       ./speak " what INFORMATION? " $O $V > /dev/null 2>&1
+
+      arecord -f S16_LE -d 4 -r 16000  /tmp/mic.wav  > /dev/null 2>&1
+     ./speak "one moment"  $O $V  > /dev/null 2>&1
+     ./gtrans.py > /tmp/stt # > /dev/null 2>&1
+
+     Output=$(cat /tmp/stt | sed -s '1d' | grep transcript | head -n 1 | sed  "s/'transcript': //g" |sed  "s/},//g" |sed 's/^ *//' |sed 's/}],//' | sed 's/{.*, //' ) #
+     echo $Output
+     SEARCH=$(echo ${Output} | tr ' ' '+' )
+     lynx -dump "https://duckduckgo.com/?q="$SEARCH > /tmp/info.page
+     Output=$( cat /tmp/info.page | sed -n '/Zero-click/,/"Wikipedia"/p'  |sed '1d' |sed 's/More at//' |sed 's/\[.*\]//'|sed 's/"Wikipedia"//')
+
+      if [[ -z $Output ]]
+        then
+            Output=$( cat /tmp/info.page | sed -n '/  1.  /,/  2.  /p' |sed '$d'| sed '$d' | sed '$d' |  sed '1d' |sed 's/\[.*\]//' )
+
+      fi
+      echo $Output > /tmp/info.result
+
+      ./read /tmp/info.result $O $V
+
        A=3
+   exit
 
 
 fi
