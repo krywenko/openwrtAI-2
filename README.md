@@ -58,6 +58,14 @@ git clone https://github.com/rbm78bln/levenshtein.git
 make 
 cp levenshtein exec to /bin
 ```
+to install chatGPT - openai
+get your free  personal key from https://beta.openai.com/  add it to openai
+```
+pip install aiohttp typing_extensions tqdm requests
+git clone https://github.com/openai/openai-python.git
+cd openai-python
+python setup.py install
+```
 and you are off and running
 
 openwrtAI is the main executable
