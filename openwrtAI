@@ -22,7 +22,7 @@ B=0
 DOMOTICZ=http://192.168.168.150:8080
 MUSIC=/MEDIA/Audio   #music folder 
 V=awb  ## voice
-O=1    ## online or offline voice 1=offline 
+O=0    ## online or offline voice 1=offline 
 
 while [[ $A < 3 ]]; do
 
@@ -155,7 +155,38 @@ elif  [ "$NO_WHITESPACE" == 'information-1' ]
     fi
    
 done
-##############chat bot end #######
+##############information chat bot end #######
+
+elif  [ "$NO_WHITESPACE" == 'chat-1' ]   ###chatGPT
+       then
+       ./speak " what would you like to chat about? " $O $V > /dev/null 2>&1
+####        echo "something" > /tmp/openai.text
+             
+
+
+   while [[ $A < 3 ]]; do  ##### chat bot loop
+     arecord -f S16_LE -d 5 -r 16000  /tmp/mic.wav  > /dev/null 2>&1
+    ./openai $O $V 
+      sleep 1
+      mpg123 bleep.mp3 > /dev/null 2>&1
+
+######### chat bot if no speech detected  #########
+
+       Output=$(cat /tmp/openai.text)
+      
+    if [[ -z $Output ]]
+        then
+
+    ./speak "Good-Bye" $O $V
+
+    exit
+    fi
+   echo "" > /tmp/openai.text
+done
+##############chatgpt  bot end #######
+
+
+
 ###exit 
 
 fi

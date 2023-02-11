@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+import openai
+import os
+import speech_recognition as sr
+from gtts import gTTS
+import sys
+
+# settings and keys
+openai.api_key = "your API for openai"
+model_engine = "text-davinci-002"
+language = 'en'
+###########
+VOICE="awb" # the default voice of flite 
+# define variables
+file = "/tmp/audio.mp3"
+TEXT ="/tmp/openai.text"
+
+
+def recognize_speech():
+    r = sr.Recognizer()
+    with sr.AudioFile('/tmp/mic.wav') as source:
+
+        audio = r.record(source, duration=60) 
+
+    # recognize speech using Google Speech Recognition
+    try:
+        # for testing purposes, we're just using the default API key
+        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        # instead of `r.recognize_google(audio)`
+        # convert the audio to text
+        print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
+        speech = r.recognize_google(audio)
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+    return speech
+
+def chatgpt_response(prompt):
+    # send the converted audio text to chatgpt
+    response = openai.Completion.create(
+        engine=model_engine,
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        temperature=0.7,
+    )
+    return response
+
+def generate_audio_file(text):
+
+    if len(sys.argv) == 3 or len(sys.argv) == 2: 
+  
+        ONLINE = int(sys.argv[1])
+        if len(sys.argv) == 3:
+            VOICE = sys.argv[2]
+
+        if ONLINE == 1:
+            #  os.system("echo "+ s +" |flite --setf duration_stretch=1.15 -voice " + VOICE)
+            os.system( 'chroot /root/OpenWrtAI /bin/bash FLITE.sh "' + text + '" ' + VOICE)
+        else:
+            # convert the text response from chatgpt to an audio file 
+            audio = gTTS(text=text, lang=language, slow=False)
+            # save the audio file
+            audio.save(file)
+            os.system("mpg123 " + file)
+    else:
+        audio = gTTS(text=text, lang=language, slow=False)
+        audio.save(file)
+        os.system("mpg123 " + file)         
+            
+
+def main():
+    # run the program
+    prompt = recognize_speech()
+    f = open("/tmp/openai.text", "w")
+    f.write(prompt)
+    f.close()
+    print(f"This is the prompt being sent to OpenAI " + prompt)
+    responses = chatgpt_response(prompt)
+    message = responses.choices[0].text
+    print(message)
+    generate_audio_file(message)
+  
+
+if __name__ == "__main__":
+    main()
