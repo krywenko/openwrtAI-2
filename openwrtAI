@@ -22,7 +22,7 @@ B=0
 DOMOTICZ=http://192.168.168.150:8080
 MUSIC=/MEDIA/Audio   #music folder 
 V=awb  ## voice
-O=0    ## online or offline voice 1=offline 
+O=1    ## online or offline voice 1=offline 
 
 while [[ $A < 3 ]]; do
 
@@ -160,20 +160,29 @@ done
 elif  [ "$NO_WHITESPACE" == 'chat-1' ]   ###chatGPT
        then
        ./speak " what would you like to chat about? " $O $V > /dev/null 2>&1
-####        echo "something" > /tmp/openai.text
-             
-
-
+        arecord -f S16_LE -d 4 -r 16000  /tmp/mic.wav  > /dev/null 2>&1
+#       ./speak "one moment"  $O $V  > /dev/null 2>&1
+       ./gtrans.py > /tmp/stt # > /dev/null 2>&1
+        Output=$(cat /tmp/stt | sed -s '1d' | grep transcript | head -n 1 | sed  "s/'transcript': //g" |sed  "s/},//g" |sed 's/^ *//' |sed 's/}],//' | sed 's/{.*, //' ) #| sed 's/^/"/' | sed 's/$/" /') #
+ 
    while [[ $A < 3 ]]; do  ##### chat bot loop
-     arecord -f S16_LE -d 5 -r 16000  /tmp/mic.wav  > /dev/null 2>&1
-    ./openai $O $V 
+
+     echo $Output > /tmp/openai.dat
+     echo $Output
+     ./openai-2    > /dev/null 2>&1    # $Output
+      ./txtcor > /tmp/openai.result  ### text corretion for faster smoother speech
+    
+      ./read /tmp/openai.result $O $V
       sleep 1
       mpg123 bleep.mp3 > /dev/null 2>&1
 
-######### chat bot if no speech detected  #########
+######### chat bot   speech detection #########
 
-       Output=$(cat /tmp/openai.text)
-      
+
+      arecord -f S16_LE -d 5 -r 16000  /tmp/mic.wav  > /dev/null 2>&1
+      ./gtrans.py > /tmp/stt # > /dev/null 2>&1
+
+      Output=$(cat /tmp/stt | sed -s '1d' | grep transcript | head -n 1 | sed  "s/'transcript': //g" |sed  "s/},//g" |sed 's/^ *//' |sed 's/}],//' | sed 's/{.*, //' ) #| sed 's/^/"/' | sed 's/$/" /')
     if [[ -z $Output ]]
         then
 
@@ -181,9 +190,10 @@ elif  [ "$NO_WHITESPACE" == 'chat-1' ]   ###chatGPT
 
     exit
     fi
-   echo "" > /tmp/openai.text
+
 done
-##############chatgpt  bot end #######
+##############information chat bot end #######
+
 
 
 

@@ -1,0 +1,23 @@
+#!/bin/bash
+##### text correction for openai for faster smoother speach
+cat /tmp/openai.text |
+sed s/$/\./ |    # chatgtp produces oneliners response and  some respones on multiple line to determine the difference
+ sed 's/^/ /' |
+ tr -d '\r\n' |
+ sed 's/\. /\n/g' |
+ sed 's/\*\*\* /\n/g' |
+ sed  's/\*//g' |
+ sed 's/$/\./'|
+ sed  's/^\.//g'|
+ awk '$NF=="Mr."{printf "%s ", $0} $NF!="Mr."{print $0}' |
+ awk '$NF=="Dr."{printf "%s ", $0} $NF!="Dr."{print $0}' |
+ awk '$NF=="MR."{printf "%s ", $0} $NF!="MR."{print $0}' |
+ awk '$NF=="DR."{printf "%s ", $0} $NF!="DR."{print $0}' |
+ awk '$NF=="Mrs."{printf "%s ", $0} $NF!="Mrs."{print $0}' |
+ awk '$NF=="MRS."{printf "%s ", $0} $NF!="MRS."{print $0}' |
+ sed '/^[[:space:]]*$/d' |
+ sed 's/\.$//' |
+ sed 's/\.$//' |
+  sed  's/\°C\>/°Celsius /g' |
+sed  's/\°F\>/°Fahrenheit /g' |
+ sed  '1d'  
