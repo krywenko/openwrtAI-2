@@ -73,3 +73,59 @@ openwrtAI is the main executable
 if you want speech across all speaker ports  based on where playback is  or fixed acroos all.  just run MPLAYER ( found in the openrtAI folder instead of mpg123 in the program speak also found same folder). it only currenly works with using online speach translation as i have not figured out how  force flite   to do it directly - but can be done if you tell flite to record TTS and then play it with MPLAYER afterwards 
 
 updated to cache elevenlabs speech-synthesis  add api key to script called eleven for more human like speech you can also make custom voices ad  clone voices  so if you want the AI to talk like john wayne or a lost one  it will
+usage: ( based on aqara zigbee cube ) 
+```
+OpenWrtAI usage
+
+    • flipping cube 90 degree – initiates the AI
+    • flipping the cube 180 – stops the AI
+    • rotating the cube right plays radio in the office
+    • rotating the cube left plays radio in the house
+      
+     VOICE Commands 
+        ◦ “Stop”  voice command to stop AI
+        ◦ Information” for duck duck go search chat box
+        ◦ “CHAT”    for ChatGTP  chat box
+        ◦ “Sci-Fi”  Random play back   of Sci-fi audio book
+        ◦ “Horror”  Random Play back of Horror audio book
+        ◦ “continue”   reading a book where you left off
+        ◦ “continue audiobook”  will continue play back of audio book
+        ◦ “configure house” set default playback to entire house
+        ◦ “configure living room”  playback  in living room
+        ◦ “configure office” playback in office
+        ◦ “weather update”  gets current weather conditions
+        ◦ “weather forecast”  gets 7 day forecast
+        ◦ “weather Alert”  tells what the weather alert  are 
+        ◦ “Play Music”  local play back of stored music
+        ◦ “Play Peggy FM”
+        ◦ “Play City FM”
+        ◦ “Play Virgin Radio”
+        ◦ “Play kiss FM”
+        ◦ “Play Power 97”
+        ◦ “Play Mix FM”
+        ◦ “Play CJOB”
+        ◦ “Play TSN”
+        ◦ “Play Top Hits”
+        ◦ “Play Comedy”
+        ◦ “Play UK Radio”
+        ◦ “Play Frankfurt Radio”
+        ◦ “Play Berlin Radio”
+        ◦ “Read Book”  enters book section
+                1. “list books” list book collection
+                2.  “ chapter #”  jumps to book chapter
+                3. “read ‘Title of book ‘ ”  will begin reading that book
+        ◦ “Audio Book” enters audio section
+                • “Chapter #”   jumps to specified chapter
+                • “List Books”
+                • “Random short stories” plays random short stories 
+                • “Random Sci-fi” play randon scifi novel
+                • “Random Horror” Plays random Horror Novel
+                • “Random Novel” Plays Random Novel
+                • “ Read ‘Title of Book’ ” 
+                   
+      Domoticz (Home Automation)
+        ◦ “turn off/on office lights”
+        ◦ “bathroom on/off” bathroom outlets
+        ◦ “office on/off”   office outlets 
+        ◦ . . . etc
+```
