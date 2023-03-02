@@ -70,4 +70,6 @@ and you are off and running
 
 openwrtAI is the main executable
 
-if you want speech across all speaker ports  based on where playback is  or fixed acroos all.  just run MPLAYER ( found in the openrtAI folder instead of mpg123 in the program speak also found same folder). it only currenly works with using online speach translation as i have not figured out how  force flite   to do it directly - but can be done if you tell flite to record TTS and then play it with MPLAYER afterwards   
+if you want speech across all speaker ports  based on where playback is  or fixed acroos all.  just run MPLAYER ( found in the openrtAI folder instead of mpg123 in the program speak also found same folder). it only currenly works with using online speach translation as i have not figured out how  force flite   to do it directly - but can be done if you tell flite to record TTS and then play it with MPLAYER afterwards 
+
+updated to cache elevenlabs speech-synthesis  add api key to script called eleven for more human like speech you can also make custom voices ad  clone voices  so if you want the AI to talk like john wayne or a lost one  it will
