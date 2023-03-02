@@ -1,0 +1,119 @@
+#!/bin/bash
+
+
+A=0
+   ./speak " I have a selection of Audio books and Short stories  that i can play.  do you want me to list the novels, play random short stories or continue playing where we left off " $1 $2 > /dev/null 2>&1
+
+######### loop begin ######
+
+while [[ $A < 3 ]]; do  
+
+        arecord -f S16_LE -d 5 -r 8000  /tmp/mic.wav  > /dev/null 2>&1
+        ./speak "one moment" $1 $2 > /dev/null 2>&1
+         ./gtrans.py > /tmp/stt # > /dev/null 2>&1
+         Output=$(cat /tmp/stt | sed -s '1d' | grep transcript | head -n 1 | sed  "s/'transcript': //g" |sed  "s/},//g" |sed 's/^ *//' |sed 's/}],//' | sed 's/{.*, //' ) #
+         echo $Output
+if [[ -z $Output ]] ;then
+    echo "ooops nothing was said "
+#
+#    if [ $A == 2 ]; then
+#        sleep 2
+#        ./speak " Sorry !  - I do not understand "  $1 $2
+#         ((A++))
+#     else
+   #     ./speak "Sorry ! - Please repeat " $1 $2
+  #      ((A++))
+ #    fi
+   fi
+
+
+
+         
+  CHAP="$(echo -e "${Output}" | cut -f 1 -d " "| sed "s/'//g")"
+         
+         if [ "$CHAP"   == 'CHAPTER' ] || [ "$CHAP"   == 'Chapter' ] || [ "$CHAP"   == 'chapter' ]; then
+         
+         #echo $Output
+            BOOK="$(echo -e "${Output}" | sed "s/^'CHAPTER//"| sed "s/^'Chapter//"|  sed "s/^'chapter//"|sed "s/'//g"| tr -d ' ' )"
+            if [ "$BOOK"   == 'one' ] ; then 
+           # echo "####"
+            BOOK=1 
+            fi
+           # echo $BOOK
+         echo $BOOK > AbookL.tmp
+         ./ABCon
+          exit
+         fi       
+         
+         
+         
+         
+         N_WHITESPACE="$(echo -e "${Output}" | sed 's/$/-1/' | tr -d ' ' | sed "s/'//g" )"
+   
+  echo $N_WHITESPACE
+ 
+  
+if [ "$N_WHITESPACE"   == 'listbooks-1' ] || [ "$N_WHITESPACE"   == 'list-1' ] || [ "$N_WHITESPACE"   == 'listthebooks-1' ]|| [ "$N_WHITESPACE"   == 'listbook-1' ]
+then
+        
+         
+          ./speak " okay,  the book list"  $1 $2   > /dev/null 2>&1
+          sleep 2
+           ./read /MEDIA/AudioBooks/Novels/title.list  $1 $2
+           exit
+
+elif [ "$N_WHITESPACE"   == 'randomshortstory-1' ]  ||[ "$N_WHITESPACE"   == 'randomshortstories-1' ]||[ "$N_WHITESPACE"   == 'randomstories-1' ] 
+then
+
+         cd /MEDIA/AudioBooks/Short_Stories
+         find  -iname '*.mp3' | shuf | mpg123 -Z -@ -
+         exit  
+
+elif [ "$N_WHITESPACE"   == 'randomnovel-1' ]  ||[ "$N_WHITESPACE"   == 'randomnovels-1' ]
+then
+
+        # cd /MEDIA/AudioBooks/Novels
+          Novel=$(ls -l /MEDIA/AudioBooks/Novels | grep ^d | awk '{print $9}' |shuf | sed -n '1p ')
+        ./ABRead $Novel
+        exit
+
+
+
+   
+   
+elif [ "$N_WHITESPACE"   == 'continue-1' ]
+then
+        ./ABCon
+        exit
+else  
+
+READ="$(echo -e "${Output}" | cut -f 1 -d " "| sed "s/'//g")"
+         #echo $READ
+    if [ "$READ"   == 'read' ] || [ "$READ"   == 'Read' ]; then
+         #echo $Output
+            BOOK="$(echo -e "${Output}" | sed "s/^'read//"| sed "s/^'Read//"| sed "s/'//g" | tr " " "_")"
+            echo $BOOK
+            TMP="$(levenshtein -i -s d -a 6 -H 1  -f /MEDIA/AudioBooks/Novels/book.list $BOOK )"   #### fuzzy logic using levenshtein method 
+             levenshtein -i   -f /MEDIA/AudioBooks/Novels/book.list $BOOK
+if [[ -z $TMP ]] ;then
+    echo "ooops- no book of that name "
+   
+             else
+             ./ABRead $TMP       
+              exit        
+    fi      
+  fi
+fi
+    if [ $A == 2 ]; then
+        sleep 2
+        ./speak " Sorry !  - I do not understand "  $1 $2
+         ((A++))
+     else
+        ./speak "Sorry ! - Please repeat" $1 $2
+        ((A++))
+     fi
+
+
+
+
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+pkill vlc
+pkill mplayer
+pkill flite
+pkill mpg123
+station=$(cat station.tmp)
+chroot /root/OpenWrtAI /bin/bash MPLAYER.sh $station 
+
+

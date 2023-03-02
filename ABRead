@@ -1,0 +1,23 @@
+#!/bin/bash
+TMP=$1
+            echo $TMP > audiobook.tmp
+             ./speak "okay reading "  $1 $2 > /dev/null 2>&1
+             Name=$(echo $TMP | tr "_" " " )
+            ./speak $Name  $1 $2 > /dev/null 2>&1
+
+             Dir=$( echo "/MEDIA/AudioBooks/Novels/"$TMP | tr -d ' ' )
+             echo $Dir > AbookD.tmp
+            pkill openwrtAI
+      cnt=0
+
+             ls $Dir > Abook.tmp
+        while read -r line;do
+             ((cnt++))
+             echo $cnt > AbookL.tmp
+             echo $line
+             file=$( echo $Dir"/"$line)
+             echo $file
+             mpg123   $Dir/$line
+             sleep 1
+        done <Abook.tmp
+

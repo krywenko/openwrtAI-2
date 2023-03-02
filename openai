@@ -6,7 +6,7 @@ from gtts import gTTS
 import sys
 
 # settings and keys
-openai.api_key = "your API for openai"
+openai.api_key = "api key"
 model_engine = "text-davinci-002"
 language = 'en'
 ###########

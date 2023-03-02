@@ -1,0 +1,15 @@
+#!/bin/bash
+        cnt=1
+        NUM=$(cat AbookL.tmp)
+        Dir=$(cat AbookD.tmp)
+        echo $Dir
+echo "ok"
+        while read -r line; do
+          ((cnt++))
+          echo $cnt > AbookL.tmp
+          echo -e "$line"
+
+          mpg123   $Dir/$line
+          sleep 1
+          done < <(tail -n "+$NUM" Abook.tmp)
+

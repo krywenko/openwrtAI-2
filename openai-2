@@ -4,7 +4,7 @@ import os
 import sys
 
 # settings and keys
-openai.api_key = "api_key"
+openai.api_key = "api key"
 model_engine = "text-davinci-002"
 language = 'en'
 ###########

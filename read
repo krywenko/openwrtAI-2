@@ -9,6 +9,9 @@ while read -r line;do
 
       echo $line > /root/OpenWrtAI/tmp/book.tmp
      chroot /root/OpenWrtAI /bin/bash FLITER.sh $3
+    elif [ "$2" == '2' ] ;then
+    ./eleven $line
+
     else
     ./google $line  > /dev/null 2>&1
     fi 
